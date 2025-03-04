@@ -1,7 +1,7 @@
 from functools import wraps
 
 from mongoengine import connect, disconnect
-from db_classes import Field, ValueType
+from .db_classes import Field, ValueType
 
 
 # function that opens a connection to the database
