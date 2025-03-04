@@ -11,7 +11,7 @@ class ValueType(Document):
 class AllowedValue(Document):
     value = StringField(required=True)
 
-    # dependency_type # an allowed value specifies the manner of 0+ dependency types
+    # dependency_group # an allowed value specifies the manner of 0+ dependency groups
     # field_value # an allowed value provides the value for 0+ field values
     # field # an allowed value provides the default value for 0+ fields
     value_type = LazyReferenceField('ValueType', required=True, passthrough=True) # an allowed value is of 1 type
@@ -67,7 +67,7 @@ class TaskType(Document):
     static_field_values = ListField(LazyReferenceField('FieldValue', passthrough=True)) # a task type has 0+ static field values
     # tasks # a task type is the type of 0+ tasks
     workspaces = ListField(LazyReferenceField('Workspace', passthrough=True)) # a task type belongs to 0+ workspaces
-    dependency_types = ListField(LazyReferenceField('DependencyType', passthrough=True)) # a task type groups its dependencies through 0+ dependency types
+    dependency_groups = ListField(LazyReferenceField('DependencyGroup', passthrough=True)) # a task type groups its dependencies through 0+ dependency groups
 
 
 
@@ -78,11 +78,12 @@ class Task(Document):
     dependencies = ListField(LazyReferenceField('Dependency', passthrough=True)) # a task depends on (0+) tasks via 0+ dependencies
     # workspaces = ListField(LazyReferenceField('Workspace')) # a task belongs to 1+ workspaces # TODO: are we doing same task in multiple workspaces?
     task_type = LazyReferenceField('TaskType', required=True, passthrough=True) # a task is of 1 task type
+    dependency_groups = ListField(LazyReferenceField('DependencyGroup', passthrough=True)) # a task groups its dependencies through 0+ dependency groups
 
 
-class DependencyType(Document):
+class DependencyGroup(Document):
     name = StringField(required=True)
-    minTasks = IntField(required=True)
+    minTasks = IntField()
     maxTasks = IntField()
 
     # task_type # a dependency type groups the dependencies of 1 task type
@@ -95,7 +96,7 @@ class Dependency(Document):
 
     depended_on_task = LazyReferenceField('Task', required=True, passthrough=True) # a dependency expresses a task's dependence on 1 task
     dependent_task = LazyReferenceField('Task', required=True, passthrough=True) # a dependency expresses the dependence of 1 task
-    dependency_type = LazyReferenceField('DependencyType', required=True, passthrough=True) # a dependency is of 1 dependency type
+    dependency_group = LazyReferenceField('DependencyGroup', passthrough=True) # a dependency is of 0 or 1 dependency type
 
 
 class FilteredView(Document):
