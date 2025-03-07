@@ -6,7 +6,7 @@ from .db_classes import Field, ValueType
 
 # function that opens a connection to the database
 def connectToDatabase():
-    host = "mongodb://localhost:27017/mongodb"
+    host = "mongodb://localhost:27017/agendum"
     connection = connect(host=host)
     if connection is None:
         raise ConnectionError("Failed to connect to the database")
