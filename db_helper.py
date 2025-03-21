@@ -35,6 +35,7 @@ ConnectionManager = ConnectionManager()
 
 
 # function that creates tag fields
+@ConnectionManager.requires_connection
 def createTagField(name):
     tag_value_type = ValueType.objects(name = "Tag")
 
