@@ -97,6 +97,7 @@ class Dependency(Document):
     depended_on_task = LazyReferenceField('Task', required=True, passthrough=True) # a dependency expresses a task's dependence on 1 task
     dependent_task = LazyReferenceField('Task', required=True, passthrough=True) # a dependency expresses the dependence of 1 task
     dependency_group = LazyReferenceField('DependencyGroup', passthrough=True) # a dependency is of 0 or 1 dependency type
+    manner = LazyReferenceField('FieldValue', required=True, passthrough=True)
 
 
 class FilteredView(Document):
