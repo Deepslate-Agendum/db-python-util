@@ -51,7 +51,7 @@ class User(Document):
 
 
 class Workspace(Document):
-    name = StringField(required=True, unique=True)
+    name = StringField(required=True)
 
     users = ListField(LazyReferenceField('User', passthrough=True)) # a workspace has 1+ members
     task_types = ListField(LazyReferenceField('TaskType', passthrough=True)) # a workspace has 1+ task types (default when created)
