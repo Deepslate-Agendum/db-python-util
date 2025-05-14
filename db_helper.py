@@ -1,7 +1,8 @@
 from functools import wraps
+from typing import Optional
 
 from mongoengine import connect, disconnect
-from .db_classes import Field, ValueType
+from .db_classes import Field, ValueType, AllowedValue
 
 
 # function that opens a connection to the database
@@ -34,12 +35,18 @@ class ConnectionManager:
 ConnectionManager = ConnectionManager()
 
 
-# function that creates tag fields
+# function that creates tags
 @ConnectionManager.requires_connection
-def createTagField(name):
-    tag_value_type = ValueType.objects(name = "Tag").first()
+def create_tag(name) -> AllowedValue:
+    tag_type = ValueType.objects(name = "Tag").first()
 
-    tag_field = Field(name = name, min_values = 1, max_values = 1, default_allowed_value = None, value_type=tag_value_type)
-    tag_field.save()
+    tag = AllowedValue(value=name, value_type=tag_type)
+    tag.save()
 
-    return tag_field
+    return tag
+
+@ConnectionManager.requires_connection
+def get_tag(name) -> Optional[AllowedValue]:
+    tag_value_type = ValueType.objects(name="Tag").first()
+    tag = AllowedValue.objects(value=name, value_type=tag_value_type).first()
+    return tag
